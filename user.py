@@ -1,4 +1,5 @@
 from db_connection import *
+from datetime import * 
 class User: 
     def __init__(self, id=None, email=None, username=None, phone=None, age=None, pin_code=None, vaccination_date=None, vaccination_centre=None):
         self.db_connection = DatabaseConnection()
@@ -43,6 +44,9 @@ class User:
     def create(self, params):
         self.db_connection.create(params, "users")
 
+    def update(self, id, params):
+        self.db_connection.update(id, params, 'users')
+
     def find(self, params):
         data = self.db_connection.find(params, "users")
         results = []
@@ -58,4 +62,8 @@ class User:
         result = self.create_class_instance(data)
         return result
 
+    def delete(self, id):
+        self.db_connection.delete(id, 'users')
     
+    def delete_all(self):
+        self.db_connection.delete_all()
