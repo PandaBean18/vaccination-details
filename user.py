@@ -1,7 +1,7 @@
 from db_connection import *
 from datetime import * 
 class User: 
-    def __init__(self, id=None, email=None, username=None, phone=None, age=None, pin_code=None, vaccination_date=None, vaccination_centre=None):
+    def __init__(self, id=None, email=None, username=None, phone=None, age=None, pin_code=None, vaccination_date=None, vaccination_centre=None, slot=None):
         self.db_connection = DatabaseConnection()
         self.id = id
         self.email = email 
@@ -11,6 +11,7 @@ class User:
         self.pin_code = pin_code
         self.vaccination_date = vaccination_date
         self.vaccination_centre = vaccination_centre
+        self.slot = slot
 
     def create_table(self):
         sql = """
@@ -22,7 +23,8 @@ class User:
             age INTEGER NOT NULL,
             pin_code INTEGER NOT NULL,
             vaccination_date DATE NOT NULL,
-            vaccination_centre VARCHAR(255) NOT NULL
+            vaccination_centre VARCHAR(255) NOT NULL, 
+            slot VARCHAR(255) NOT NULL
         );
         """
         self.db_connection.create_table(sql)
@@ -36,8 +38,9 @@ class User:
         pin_code = data[5]
         vaccination_date = data[6]
         vaccination_centre = data[7]
+        slot = data[8]
 
-        user = User(id, email, username, phone, age, pin_code, vaccination_date, vaccination_centre)
+        user = User(id, email, username, phone, age, pin_code, vaccination_date, vaccination_centre, slot)
 
         return user 
 
@@ -67,3 +70,6 @@ class User:
     
     def delete_all(self):
         self.db_connection.delete_all()
+
+u = User()
+u.create({'email': 'tEstUSer3@gmail.com', 'username': 'Test User 3',})

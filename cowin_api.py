@@ -38,6 +38,11 @@ class CowinApi:
                     sessions.append(session)
 
         return sessions
+
+    def get_slots(self, session):
+        slots = session['slots']
+        return slots 
+
     
 api = CowinApi()
 api.get_data(110010, '08-02-2022')
