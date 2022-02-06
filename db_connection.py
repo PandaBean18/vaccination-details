@@ -41,7 +41,7 @@ class DatabaseConnection:
                 columns_string += ", {}".format(key)
                 values_string += ", '{}'".format(value)
             
-        insert_string = "INSERT INTO {} ({}) VALUES {};".format(table_name, columns_string, values_string)
+        insert_string = "INSERT INTO {} ({}) VALUES ({});".format(table_name, columns_string, values_string)
         return insert_string
 
     def create_find_query(self, params):
@@ -77,7 +77,7 @@ class DatabaseConnection:
         sql = "SELECT * FROM {} WHERE {};".format(table_name, where_query)
         cursor = self.connection.cursor()
         cursor.execute(sql)
-        results = cursor.fetchall()[0]
+        results = cursor.fetchall()
         cursor.close()
         return results  
 
