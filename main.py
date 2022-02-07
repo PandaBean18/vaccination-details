@@ -57,7 +57,7 @@ def get_date(dates):
         print('Please select a valid date.\n')
         chosen_option = get_date(dates)
 
-    return dates[chosen_option-1]
+    return chosen_option-1
 
 def get_session(sessions):
     i = 0
@@ -84,7 +84,7 @@ def get_session(sessions):
         print('Invalid option selected.\n')
         chosen_option = get_session(sessions) 
 
-    return sessions[chosen_option-1]
+    return chosen_option-1
 
 def get_slot(session):
     i = 0
@@ -99,10 +99,9 @@ def get_slot(session):
     print()
     if not(valid_input(len(slots), chosen_option)):
         print('Invalid option selected.\n')
-        get_slot(session)
+        chosen_option = get_slot(session)
 
-    return slots[chosen_option-1]
-
+    return chosen_option-1
 
 
 def get_centers_data(pin):
@@ -112,10 +111,10 @@ def get_centers_data(pin):
     tomorrow = (today + dt).strftime('%d-%m-%Y')
     api.get_data(pin, tomorrow)
     dates = api.get_dates()
-    date = get_date(dates)
+    date = dates[get_date(dates)]
     sessions = api.get_sessions_for_date(date)
-    session = get_session(sessions)
-    slot = get_slot(session)
+    session = sessions[get_session(sessions)]
+    slot = session['slots'][get_slot(session)]
 
     return [date, session['name'], slot]
 
@@ -131,6 +130,21 @@ def render_user_profile(user):
     print('Time slot:', user.slot)
     print()
 
+
+def update_profile(id):
+    email = get_email()
+    username = get_username()
+    phone = get_phone()
+    age = int(input('Please type in your age\n'))
+    print()
+
+    params = {'email': email, 'username': username, 'phone': phone, 'age': age}
+
+    User().update(id, params)
+    user = User().find_by_id(id)
+    render_user_profile(user)
+    run()
+
 def new_user():
     email = get_email()
 
@@ -145,33 +159,24 @@ def new_user():
     pin_code = int(get_pin_code())
     print()
     center_data = get_centers_data(pin_code)
-    date = center_data[0]
+    date_arr = center_data[0].split('-')
+    reversed_date_arr = list(reversed(date_arr))
+    date = '-'.join(reversed_date_arr)
     session = center_data[1]
     slot = center_data[2] 
     User().create({'email': email, 'username': username, 'phone': phone, 'age': age, 'pin_code': pin_code, 'vaccination_date': date, 'vaccination_centre': session, 'slot': slot})
     user = User().find({'email': email})[0]
     render_user_profile(user)
-
-def update_profile(id):
-    email = get_email()
-    username = get_username()
-    phone = get_phone()
-    age = int(input('Please type in your age\n'))
-    print()
-
-    params = {'email': email, 'username': username, 'phone': phone, 'age': age}
-
-    User().update(id, params)
-    render_user_profile()
     run()
-
 
 def existing_user():
     email = input('Please type the registered email.\n')
+    print()
     user = User().find({'email': email})
-    user_id = user[0].id
     if  len(user) == 0:
         print('User with email {} doesnt exist.\n'.format(email))
+        run()
+    user_id = user[0].id
 
     render_user_profile(user[0])
 
@@ -191,11 +196,36 @@ def existing_user():
     if chosen_option == 1:
         update_profile(user_id)
     elif chosen_option == 2:
-        date = user[0].vaccination_date
-        
+        date = user[0].vaccination_date.strftime('%d-%m-%Y')
+        date_today = datetime.today()
+        dt = timedelta(days = 1)
+        tmr = (date_today + dt).strftime('%d-%m-%Y')
+        pin = user[0].pin_code
+        api = CowinApi()
+        api.get_data(pin, tmr)
+        sessions = api.get_sessions_for_date(date)
+        session = sessions[get_session(sessions)]
+        slot = session['slots'][get_slot(session)]
+        User().update(user_id, {'vaccination_centre': session['name'], 'slot': slot})
+        print('Profile successfully updated.\n')
+        user = User().find_by_id(user_id)
+        render_user_profile(user)
+        run()
+    elif chosen_option == 3:
+        pin_code = user[0].pin_code
+        data = get_centers_data(pin_code)
+        date_arr = data[0].split('-')
+        reversed_date_arr = list(reversed(date_arr))
+        date = '-'.join(reversed_date_arr)
+        center = data[1]
+        slot = data[2]
+        User().update(user_id, {'vaccination_date': date, 'vaccination_centre': center, 'slot': slot})
+        print('Profile successfully updated.\n')
+        user = User().find_by_id(user_id)
+        render_user_profile(user)
+        run()
 
 def run():
-    print('Please type the number in front of the option to select the option.\n')
     print('1. New user\n2. Registered User\n\nEnter 0 to exit\n')
     chosen_option = int(input())
     print()
@@ -207,4 +237,7 @@ def run():
     elif chosen_option == 2:
         existing_user()
 
+print('                                                         Welcome to vaccination details manager!\n')
+print('****************************************************************************************************************************************************************************\n')
+print('Please type the number in front of the option to select the option.\n')
 run()
