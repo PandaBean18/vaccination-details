@@ -44,7 +44,3 @@ class CowinApi:
         return slots 
 
     
-api = CowinApi()
-api.get_data(110010, '08-02-2022')
-sessions = api.get_sessions_for_date('14-02-2022')
-print(sessions)

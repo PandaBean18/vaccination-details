@@ -19,7 +19,7 @@ class User:
             id SERIAL PRIMARY KEY,
             email VARCHAR(255) NOT NULL,
             username VARCHAR(255) NOT NULL,
-            phone INTEGER NOT NULL, 
+            phone BIGINT NOT NULL, 
             age INTEGER NOT NULL,
             pin_code INTEGER NOT NULL,
             vaccination_date DATE NOT NULL,
@@ -71,5 +71,6 @@ class User:
     def delete_all(self):
         self.db_connection.delete_all()
 
-u = User()
-u.create({'email': 'tEstUSer3@gmail.com', 'username': 'Test User 3',})
+#u = User()
+#u.create_table()
+#u.create({'email': 'tEstUSer3@gmail.com', 'username': 'Test User 3', 'phone': 9999999999, 'age': 19, 'pin_code': 110010, 'vaccination_date': '09-02-2022', 'vaccination_centre': 'None', 'slot': 'None'})
