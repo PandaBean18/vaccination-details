@@ -71,6 +71,10 @@ class User:
     def delete_all(self):
         self.db_connection.delete_all()
 
+    def already_exists(self, params):
+        user = self.find(params)
+        return len(user) != 0
+
 #u = User()
 #u.create_table()
 #u.create({'email': 'tEstUSer3@gmail.com', 'username': 'Test User 3', 'phone': 9999999999, 'age': 19, 'pin_code': 110010, 'vaccination_date': '09-02-2022', 'vaccination_centre': 'None', 'slot': 'None'})
