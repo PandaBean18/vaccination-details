@@ -7,7 +7,7 @@ def valid_input(max_val, input_val):
     return (input_val <= max_val)
 
 def get_email():
-    email = input('Please type in your email.\n')
+    email = input('Please type in your email.\n>')
     print()
     email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     if not(re.fullmatch(email_regex, email)):
@@ -17,12 +17,12 @@ def get_email():
     return email
 
 def get_username():
-    username = input('Please type in your full name.\n')
+    username = input('Please type in your full name.\n>')
     print()
     return username.title()
 
 def get_phone():
-    number = int(input('Please type in your phone number.\n'))
+    number = int(input('Please type in your phone number.\n>'))
     print()
     mod_val = number % 1000000000 
     
@@ -34,7 +34,7 @@ def get_phone():
 
 def get_pin_code():
     pin_code_regex = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$"
-    pin_code = input('Please type your pincode.\n')
+    pin_code = input('Please type your pincode.\n>')
     print()
     
     if not(re.fullmatch(pin_code_regex, pin_code)):
@@ -51,7 +51,7 @@ def get_date(dates):
         print(i+1 ,'. ', dates[i], sep="")
         i += 1
     print()
-    chosen_option = int(input())
+    chosen_option = int(input('>'))
     print()
     if not(valid_input(len(dates), chosen_option)): 
         print('Please select a valid date.\n')
@@ -77,7 +77,7 @@ def get_session(sessions):
         print('    Vaccine:', current_session['vaccine'], end='\n\n')
         i += 1
     
-    chosen_option = int(input())
+    chosen_option = int(input('>'))
     print()
 
     if not(valid_input(len(sessions), chosen_option)):
@@ -95,7 +95,7 @@ def get_slot(session):
         print(i+1, '. ', slots[i], sep='')
         i += 1
     
-    chosen_option = int(input())
+    chosen_option = int(input('>'))
     print()
     if not(valid_input(len(slots), chosen_option)):
         print('Invalid option selected.\n')
@@ -135,7 +135,7 @@ def update_profile(id):
     email = get_email()
     username = get_username()
     phone = get_phone()
-    age = int(input('Please type in your age\n'))
+    age = int(input('Please type in your age\n>'))
     print()
 
     params = {'email': email, 'username': username, 'phone': phone, 'age': age}
@@ -154,7 +154,7 @@ def new_user():
 
     username = get_username()
     phone  = get_phone()
-    age = int(input('Please type in your age\n'))
+    age = int(input('Please type in your age\n>'))
     print()
     pin_code = int(get_pin_code())
     print()
@@ -170,7 +170,7 @@ def new_user():
     run()
 
 def existing_user():
-    email = input('Please type the registered email.\n')
+    email = input('Please type the registered email.\n>')
     print()
     user = User().find({'email': email})
     if  len(user) == 0:
@@ -185,12 +185,12 @@ def existing_user():
     print('2. Change vaccination center')
     print('3. Change vaccination date')
 
-    chosen_option = int(input())
+    chosen_option = int(input('>'))
     print()
 
     while not(valid_input(3, chosen_option)):
         print('Please input a valid option.\n')
-        chosen_option = int(input())
+        chosen_option = int(input('>'))
         print()
 
     if chosen_option == 1:
@@ -227,7 +227,7 @@ def existing_user():
 
 def run():
     print('1. New user\n2. Registered User\n\nEnter 0 to exit\n')
-    chosen_option = int(input())
+    chosen_option = int(input('>'))
     print()
     if not(valid_input(2, chosen_option)):
         print('Please input a valid option.\n')
