@@ -3,7 +3,7 @@ import psycopg2
 class DatabaseConnection:
     
     def __init__(self):
-        self.connection = psycopg2.connect("dbname=vaccination_details user=raghapbean password=postgres")
+        self.connection = psycopg2.connect("dbname=vaccination_details user=YOUR_POSTGRES_USER password=YOUR_POSTGRES_PASS")
 
     def create_table(self, sql):
         cursor = self.connection.cursor()
